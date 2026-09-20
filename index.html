@@ -197,6 +197,21 @@ function renderFood(){
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 norm();render();
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+if('serviceWorker' in navigator){
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing)return;
+    refreshing=true;
+    location.reload();
+  });
+  addEventListener('load',async()=>{
+    try{
+      const reg=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});
+      await reg.update();
+      setInterval(()=>reg.update().catch(()=>{}),15*60*1000);
+      document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')reg.update().catch(()=>{})});
+    }catch(e){}
+  });
+}
 
 </script></body></html>
