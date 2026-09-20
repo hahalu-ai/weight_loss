@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#111111" />
+<title>减脂关卡 · 每顿饭前先看这里</title>
+<style>
+  :root{
+    --bg:#f5f5f3; --card:#fff; --text:#171717; --muted:#6b6b6b; --line:#dfdfdc;
+    --accent:#111; --good:#1c7c54; --warn:#b26b00; --danger:#a52a2a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}
+  .wrap{max-width:860px;margin:0 auto;padding:20px 16px 100px}
+  h1{font-size:30px;line-height:1.1;margin:8px 0}
+  h2{font-size:20px;margin:0 0 10px}
+  h3{font-size:16px;margin:0 0 8px}
+  p{line-height:1.6}
+  .muted{color:var(--muted)}
+  .top{display:grid;grid-template-columns:1.3fr .7fr;gap:14px;margin:18px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+  .hero{padding:24px}
+  .hero .big{font-size:42px;font-weight:800;letter-spacing:-1px}
+  .progress{height:12px;background:#ececea;border-radius:999px;overflow:hidden;margin:14px 0 8px}
+  .progress > div{height:100%;background:#111;width:0%}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .mile{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fafafa}
+  .mile strong{display:block;font-size:18px;margin-bottom:4px}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:6px 9px;border-radius:999px;background:#efefed}
+  .status.done{background:#e8f5ee;color:#15623f}
+  .stage{border-left:5px solid #111}
+  label{display:block;font-size:14px;margin:10px 0 5px}
+  input[type=number], input[type=text], select, textarea{
+    width:100%;padding:12px 13px;border-radius:12px;border:1px solid #cfcfcb;background:#fff;font-size:16px
+  }
+  input[type=range]{width:100%}
+  .checks{display:grid;gap:9px;margin:12px 0}
+  .check{display:flex;gap:10px;align-items:flex-start;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fafafa}
+  .check input{margin-top:3px;transform:scale(1.2)}
+  button,.btn{
+    appearance:none;border:none;border-radius:12px;padding:12px 14px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px
+  }
+  .primary{background:#111;color:white}
+  .secondary{background:#ececea;color:#111}
+  .danger{background:#fff0f0;color:#8d1f1f;border:1px solid #efcaca}
+  .full{width:100%}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .note{font-size:13px;line-height:1.5;color:var(--muted)}
+  .meal-photo{width:100%;max-height:300px;object-fit:cover;border-radius:14px;border:1px solid var(--line);display:none;margin-top:10px}
+  .gateOverlay{position:fixed;inset:0;background:rgba(10,10,10,.84);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
+  .gateBox{width:min(600px,100%);background:white;border-radius:22px;padding:22px;max-height:90vh;overflow:auto}
+  .gateBox h2{font-size:26px}
+  .lockline{padding:10px 12px;border-radius:12px;background:#fff6e8;color:#7c4e00;margin:10px 0}
+  .footerDock{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px 12px;z-index:20}
+  .footerDock .inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .dockBtn{font-size:13px;padding:10px 6px;background:#f0f0ee;border-radius:10px;border:none}
+  .dockBtn.active{background:#111;color:#fff}
+  .small{font-size:12px}
+  .hidden{display:none!important}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:#111;color:#fff;padding:10px 14px;border-radius:999px;z-index:12000;display:none;font-size:13px}
+  .rule{border-top:1px dashed var(--line);margin:16px 0}
+  .warning{background:#fff5f5;border:1px solid #f0caca;border-radius:14px;padding:12px;color:#7f2525}
+  @media(max-width:700px){
+    .top,.grid{grid-template-columns:1fr}
+    .milestones{grid-template-columns:1fr 1fr}
+    .hero .big{font-size:36px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero card">
+    <div class="muted">176 cm · 22 岁 · 当前阶段：先到 110 kg</div>
+    <h1>每顿饭前，先过关。</h1>
+    <p class="muted">目标不是靠硬饿把数字压下去，而是把每次吃东西变成一次可控决策。</p>
+    <div class="top">
+      <div>
+        <div class="big"><span id="currentWeight">114.0</span> kg</div>
+        <div class="progress"><div id="progressBar"></div></div>
+        <div class="small muted">阶段 1：114 → 110 kg　·　阶段 2：110 → 105 kg　·　长期：95 / 85 kg</div>
+      </div>
+      <div class="card" style="padding:14px;background:#fafafa">
+        <div class="small muted">今天完成度</div>
+        <div style="font-size:34px;font-weight:800"><span id="doneCount">0</span>/4</div>
+        <div class="small muted">早晨 / 午餐 / 晚餐 / 宵夜</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>你为什么要继续</h2>
+    <div class="milestones">
+      <div class="mile"><strong>110 kg</strong><span>脸部水肿、腰腹开始明显变化</span></div>
+      <div class="mile"><strong>105 kg</strong><span>XL 更常见，衣服开始明显松</span></div>
+      <div class="mile"><strong>100 kg</strong><span>整体体积明显缩小，L–XL 过渡</span></div>
+      <div class="mile"><strong>95 kg</strong><span>脸型和腰线变化很明显，很多款能穿 L</span></div>
+      <div class="mile"><strong>90 kg</strong><span>肩腰比例开始更清楚</span></div>
+      <div class="mile"><strong>85 kg</strong><span>若保住肌肉，L 为主，宽松款可能 M</span></div>
+    </div>
+    <p class="note">尺码只是粗略参考，品牌、肩宽和脂肪分布都会影响实际尺码。真正的目标是保住肌肉、稳定减脂，让体型变化跟得上体重变化。</p>
+  </div>
+
+  <div class="grid" style="margin-top:14px">
+    <section class="card stage" id="morningCard">
+      <div class="status" id="morningStatus">○ 未完成</div>
+      <h2 style="margin-top:10px">早晨关卡</h2>
+      <label>晨起体重（kg）</label>
+      <input id="morningWeight" type="number" step="0.1" min="60" max="200" placeholder="例如 113.4">
+      <label>今天第一顿预计几点？</label>
+      <input id="firstMealTime" type="text" placeholder="例如 12:30">
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="m1">今天不靠断食或灌水压食欲</label>
+        <label class="check"><input type="checkbox" id="m2">今天至少两顿都先保证蛋白质</label>
+        <label class="check"><input type="checkbox" id="m3">今天保留合理碳水，不走极端低碳</label>
+      </div>
+      <button class="primary full" onclick="finishMorning()">完成早晨关卡</button>
+    </section>
+
+    <section class="card stage" id="lunchCard">
+      <div class="status" id="lunchStatus">○ 未完成</div>
+      <h2 style="margin-top:10px">午餐前关卡</h2>
+      <p class="muted">拍照、判断饥饿、确认这一顿的结构，然后再吃。</p>
+      <button class="secondary full" onclick="openGate('lunch')">打开午餐关卡</button>
+    </section>
+
+    <section class="card stage" id="dinnerCard">
+      <div class="status" id="dinnerStatus">○ 未完成</div>
+      <h2 style="margin-top:10px">晚餐前关卡</h2>
+      <p class="muted">晚餐不需要“补偿性少吃”。先看全天，再决定份量。</p>
+      <button class="secondary full" onclick="openGate('dinner')">打开晚餐关卡</button>
+    </section>
+
+    <section class="card stage" id="nightCard">
+      <div class="status" id="nightStatus">○ 未完成</div>
+      <h2 style="margin-top:10px">宵夜前关卡</h2>
+      <p class="muted">真饿可以吃，但先区分生理饥饿和嘴馋。</p>
+      <button class="secondary full" onclick="openNightGate()">打开宵夜关卡</button>
+    </section>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>吃饭前拍给 ChatGPT</h2>
+    <p class="muted">网页没法直接读取你的 ChatGPT 对话，所以这里帮你生成固定提问。拍照后点一下，把提示复制，再打开 ChatGPT 上传照片。</p>
+    <textarea id="promptBox" rows="6" readonly>这是我减脂期间的一顿饭。我现在 176cm、22岁，当前体重约114kg。请根据照片估算食物组成和大致份量，直接告诉我：1）哪些可以全部吃；2）哪些建议吃一半或减少；3）蛋白质是否够；4）碳水是否合理；5）如果今天晚上还会饿，应该预留什么。不要鼓励极端节食。</textarea>
+    <div class="actions">
+      <button class="primary" onclick="copyPrompt()">复制提问</button>
+      <a class="btn secondary" href="https://chatgpt.com/" target="_blank" rel="noopener">打开 ChatGPT</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>今晚饿了，不要乱处理</h2>
+    <div class="grid">
+      <div class="mile">
+        <strong>轻微嘴馋 1–4/10</strong>
+        <span>先等 10 分钟，喝水或无糖饮料。仍想吃，再进入宵夜关卡。</span>
+      </div>
+      <div class="mile">
+        <strong>明显饥饿 5–10/10</strong>
+        <span>可以吃一份 150–250 kcal 左右的高蛋白小食，例如希腊酸奶、鸡蛋、牛奶/蛋白奶昔、豆腐等。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning" style="margin-top:14px">
+    如果出现持续头晕、心慌、明显乏力、反复恶心、意识发懵或训练状态突然明显恶化，不要继续用更少的食物或更多的水硬压体重。
+  </div>
+</div>
+
+<div class="footerDock">
+  <div class="inner">
+    <button class="dockBtn" onclick="jump('morningCard')">早晨</button>
+    <button class="dockBtn" onclick="openGate('lunch')">午餐</button>
+    <button class="dockBtn" onclick="openGate('dinner')">晚餐</button>
+    <button class="dockBtn" onclick="openNightGate()">宵夜</button>
+  </div>
+</div>
+
+<div id="gateOverlay" class="gateOverlay">
+  <div class="gateBox">
+    <div class="status" id="gateLabel">吃饭前关卡</div>
+    <h2 id="gateTitle">先别吃，先做 30 秒检查</h2>
+    <div class="lockline">只有完成下面项目，才能点“解锁这一顿”。</div>
+    <label>现在有多饿？ <strong><span id="hungerValue">6</span>/10</strong></label>
+    <input id="hunger" type="range" min="1" max="10" value="6" oninput="document.getElementById('hungerValue').textContent=this.value">
+    <label>这顿是什么？</label>
+    <input id="mealName" type="text" placeholder="例如 牛肉 + 米饭 + 青菜 / 外卖拉面">
+    <label>拍一张食物照片（只保存在本机预览，不上传）</label>
+    <input id="mealPhoto" type="file" accept="image/*" capture="environment">
+    <img id="mealPreview" class="meal-photo" alt="">
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="g1">我已经确认有明确的蛋白质来源</label>
+      <label class="check"><input type="checkbox" id="g2">我保留碳水，但不会无意识加第二大份</label>
+      <label class="check"><input type="checkbox" id="g3">我会先吃蛋白质和正常主食，不用水把自己灌饱</label>
+      <label class="check"><input type="checkbox" id="g4">如果是外卖/大份，我接受吃不完，不要求清盘</label>
+      <label class="check"><input type="checkbox" id="g5">我已经准备把照片发给 ChatGPT 或至少看过份量再吃</label>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="unlockMeal()">解锁这一顿</button>
+      <button class="secondary" onclick="closeGate()">暂时不吃，关闭</button>
+    </div>
+    <p class="note">网页只能约束你在网页里的流程，不能阻止现实中的进食；这个“关卡”是为了制造一个固定停顿，让你每次吃之前先做决定。</p>
+  </div>
+</div>
+
+<div id="nightOverlay" class="gateOverlay">
+  <div class="gateBox">
+    <div class="status">宵夜前关卡</div>
+    <h2>先判断：真饿，还是只是想吃？</h2>
+    <label>饥饿程度：<strong><span id="nightHungerValue">4</span>/10</strong></label>
+    <input id="nightHunger" type="range" min="1" max="10" value="4" oninput="document.getElementById('nightHungerValue').textContent=this.value; renderNightAdvice()">
+    <div id="nightAdvice" class="lockline"></div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="n1">我不是因为无聊、刷视频、打游戏顺手想吃</label>
+      <label class="check"><input type="checkbox" id="n2">如果要吃，我会选一份小份高蛋白食物，而不是开一整袋零食</label>
+      <label class="check"><input type="checkbox" id="n3">我不会因为今天某顿吃多了，就用“今晚完全不吃”惩罚自己</label>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="finishNight()">完成宵夜判断</button>
+      <button class="secondary" onclick="document.getElementById('nightOverlay').style.display='none'">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY='fatLossGateV1';
+let state = JSON.parse(localStorage.getItem(KEY)||'{}');
+let activeMeal=null;
+
+function today(){ return new Date().toISOString().slice(0,10); }
+function normalize(){
+  if(state.date !== today()){
+    state={date:today(), morning:false,lunch:false,dinner:false,night:false,weight:state.weight||114.0,history:state.history||[]};
+    save();
+  }
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); render(); }
+function render(){
+  normalize();
+  document.getElementById('currentWeight').textContent=(state.weight||114).toFixed(1);
+  const stages=['morning','lunch','dinner','night'];
+  let c=0;
+  stages.forEach(s=>{
+    const done=!!state[s]; if(done)c++;
+    const el=document.getElementById(s+'Status');
+    if(el){ el.textContent=done?'✓ 已完成':'○ 未完成'; el.className='status'+(done?' done':'');}
+  });
+  document.getElementById('doneCount').textContent=c;
+  let p=Math.max(0,Math.min(100,((114-(state.weight||114))/(114-85))*100));
+  document.getElementById('progressBar').style.width=p+'%';
+}
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',1800);
+}
+function finishMorning(){
+  const w=parseFloat(document.getElementById('morningWeight').value);
+  if(!w || !document.getElementById('m1').checked || !document.getElementById('m2').checked || !document.getElementById('m3').checked){
+    toast('先填体重并完成 3 个确认'); return;
+  }
+  state.weight=w; state.morning=true;
+  state.history=state.history||[];
+  state.history.push({date:today(),weight:w});
+  save(); toast('早晨关卡完成');
+}
+function openGate(meal){
+  normalize();
+  activeMeal=meal;
+  document.getElementById('gateLabel').textContent=meal==='lunch'?'午餐前关卡':'晚餐前关卡';
+  document.getElementById('gateTitle').textContent='先别吃，先做 30 秒检查';
+  ['g1','g2','g3','g4','g5'].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById('mealName').value='';
+  document.getElementById('mealPreview').style.display='none';
+  document.getElementById('mealPhoto').value='';
+  document.getElementById('gateOverlay').style.display='flex';
+}
+function closeGate(){ document.getElementById('gateOverlay').style.display='none'; }
+function unlockMeal(){
+  const ok=['g1','g2','g3','g4','g5'].every(id=>document.getElementById(id).checked);
+  const meal=document.getElementById('mealName').value.trim();
+  if(!ok || !meal){ toast('先完成所有确认，并填写这顿吃什么'); return; }
+  state[activeMeal]=true; save(); closeGate(); toast('这一顿已解锁：按计划吃');
+}
+document.getElementById('mealPhoto').addEventListener('change',e=>{
+  const f=e.target.files && e.target.files[0]; if(!f)return;
+  const img=document.getElementById('mealPreview'); img.src=URL.createObjectURL(f); img.style.display='block';
+});
+function openNightGate(){
+  renderNightAdvice();
+  document.getElementById('nightOverlay').style.display='flex';
+}
+function renderNightAdvice(){
+  const n=parseInt(document.getElementById('nightHunger').value||4);
+  const box=document.getElementById('nightAdvice');
+  box.textContent = n<=4
+    ? '1–4/10：更像轻微嘴馋。先等 10 分钟，再决定；如果仍然明显想吃，再选小份。'
+    : '5–10/10：可以吃。优先选择 150–250 kcal 左右的高蛋白小食，不需要硬扛。';
+}
+function finishNight(){
+  if(!['n1','n2','n3'].every(id=>document.getElementById(id).checked)){ toast('先完成 3 个确认'); return; }
+  state.night=true; save(); document.getElementById('nightOverlay').style.display='none'; toast('宵夜判断完成');
+}
+function copyPrompt(){
+  const v=document.getElementById('promptBox').value;
+  navigator.clipboard.writeText(v).then(()=>toast('已复制，去 ChatGPT 上传照片'));
+}
+function jump(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+render();
+
+// 页面保持打开时，在常见时间段给页面内提醒（不会冒充系统通知）
+setInterval(()=>{
+  const h=new Date().getHours();
+  if(h>=11 && h<15 && !state.lunch) document.title='【午餐前先过关】减脂关卡';
+  else if(h>=17 && h<21 && !state.dinner) document.title='【晚餐前先过关】减脂关卡';
+  else if(h>=21 && !state.night) document.title='【宵夜前先判断】减脂关卡';
+  else document.title='减脂关卡 · 每顿饭前先看这里';
+},30000);
+</script>
+</body>
+</html>
