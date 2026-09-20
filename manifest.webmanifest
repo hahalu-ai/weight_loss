@@ -1,0 +1,13 @@
+{
+  "name": "减脂关卡",
+  "short_name": "减脂关卡",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f3",
+  "theme_color": "#111111",
+  "description": "每天早晨、午餐、晚餐和宵夜前的个人减脂决策关卡。",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
