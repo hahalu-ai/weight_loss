@@ -1,4 +1,4 @@
-const CACHE = "weight-loss-v3";
+const CACHE = "weight-loss-v4";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", event => {
